@@ -5,9 +5,13 @@
  * Connect the Prism to your Arduino via I2C:
  * - SDA to SDA
  * - SCL to SCL
- * - VCC to 3.3V or 5V
+ * - VCC to 3.3v (Prism supplies 3.3v up to 100mA)
  * - GND to GND
  */
+
+/* To understand how layers work please check out page 2 of the user guide below 
+* https://www.gobilda.com/content/user_manuals/3118-2855-0001_user-guide.pdf#page=2
+*/
 
 #include "main.h"
 #include <GoBilda_Prism.h>
@@ -126,7 +130,7 @@ void exampleDroidScan()
     scanner->setEyeWidth(5);                                          // Eye Width at 5 pixels
     scanner->setTrailWidth(10);                                       // Trail Width at 10 pixels
     scanner->setIndexes(0, 23);                                       // Bounce between pixels 0 to 23
-    scanner->setDroidScanStyle(goBILDA::DroidScanStyle::BOTH_TAIL);   // Tail should be on the front and back of the eye
+    scanner->setDroidScanStyle(goBILDA::DroidScanStyle::BOTH_TAIL);   // (NO_TAIL, FRONT_TAIL, BACK_TAIL, BOTH_TAIL)
     prism.insertAndUpdateAnimation(LayerHeight::LAYER_0, scanner);    // Layer 0
 }
 
@@ -153,7 +157,7 @@ void examplePoliceLights()
     goBILDA::PoliceLights* police = new goBILDA::PoliceLights();      // Police Lights Animation
     police->setPeriod(1000);                                          // Period for the Animation
     police->setIndexes(0, 23);                                        // Show on pixels 0-23
-    police->setPoliceLightsStyle(goBILDA::PoliceLightsStyle::Style1); // Use Style 1
+    police->setPoliceLightsStyle(goBILDA::PoliceLightsStyle::Style1); // Use Style 1-3
     prism.insertAndUpdateAnimation(LayerHeight::LAYER_0, police);     // Layer 0
 }
 
@@ -180,7 +184,7 @@ void exampleSineWave()
 void exampleLayers(void)
 {
   Serial.println(__func__);
-  
+
   goBILDA::SingleFill *sf1 = new goBILDA::SingleFill();
   goBILDA::SingleFill *sf2 = new goBILDA::SingleFill();
   goBILDA::DroidScan *ds   = new goBILDA::DroidScan();
@@ -202,21 +206,4 @@ void exampleLayers(void)
   prism.insertAnimation(LayerHeight::LAYER_1, sf1);
   prism.insertAnimation(LayerHeight::LAYER_2, sf2);
   prism.updateAllAnimations();
-}
-
-void exampleArtboards()
-{
-    // Save current animations to artboard 0
-    prism.saveCurrentAnimationsToArtboard(goBILDA::Artboard::ARTBOARD_0);
-    
-    // Load different animations...
-    // ...then save to artboard 1
-    prism.saveCurrentAnimationsToArtboard(goBILDA::Artboard::ARTBOARD_1);
-    
-    // Load artboard 0 back
-    prism.loadAnimationsFromArtboard(goBILDA::Artboard::ARTBOARD_0);
-    
-    // Set artboard 0 as default boot animation
-    prism.setDefaultBootArtboard(goBILDA::Artboard::ARTBOARD_0);
-    prism.enableDefaultBootArtboard(true);
 }
