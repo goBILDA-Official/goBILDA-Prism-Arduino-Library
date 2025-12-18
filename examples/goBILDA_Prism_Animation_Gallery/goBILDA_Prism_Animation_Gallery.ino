@@ -28,7 +28,6 @@ void setup()
     Serial.println("goBILDA Prism RGB LED Driver Example");
     
     // Initialize the Prism driver
-    Wire.setPins(42, 41); // V2 CodeBox
     if (!prism.begin()) {
         Serial.println("Failed to initialize Prism driver! Please Check I2C connections");
         while (1) 
